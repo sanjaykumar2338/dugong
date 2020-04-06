@@ -1,0 +1,25 @@
+{
+    "roupa": [
+        {  "id": 1,
+            "class": "T-shirts",
+            "name": "Makito keya 130",
+            
+            "imgName": "11.jpg",
+            "price": 89
+        },
+        {  "id": 2,
+            "class": "bones",
+            "name": "Roly Atomic 150",
+            "imgName": "roly atomic 150 1.jpg",
+            "price": 100
+        },
+        {  "id": 3,
+            "class": "T-shirt sellect",
+            "name": "MAkito Hecom",
+            "imgName": "makito hecom 1.05.jpg",
+            "price": 200
+        }
+
+
+    ]
+}

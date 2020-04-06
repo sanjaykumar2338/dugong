@@ -1,0 +1,11 @@
+{
+    "shipping_method": [
+        {   
+            "name": "Shpping Method One"
+           
+        },
+        {
+            "name": "Shpping Method Two"
+        }
+    ]
+}

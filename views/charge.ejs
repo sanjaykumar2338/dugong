@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <title>Dugong</title>
+</head>
+
+<body class="bg-gray-900">
+  <nav class="bg-purple-900 h-20 flex justify-center">
+    <h1 class="text-white text-5xl">Dugong Stripe Payment</h1>
+  </nav>
+
+  <div class="flex justify-center mt-32">
+		<form action="/charge" method="POST" class="flex flex-col w-1/3">
+    
+    <input id="card-name" name="name" type="text">
+    <!-- placeholder for Elements -->
+    <div id="card-element"></div>
+    <button id="card-button" data-secret="<%= client_secret %>">
+        Submit Payment
+    </button>
+
+  </form>
+  </div>
+</body>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="./js/card.js"></script>
+
+</html>

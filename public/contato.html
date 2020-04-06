@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <title> DS </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="author" content="DS">
+  <meta name="description" content="T-shirts">
+  <meta name="keywords" content="T-shirts">
+  <link href="css/all.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/FancyProductDesigner-all.min.css" />
+ <script type="text/javascript"></script>
+ <script defer src="popup.js"></script>
+  
+</head>
+<body>
+ <header>
+     <div class="content" id="navbar">
+         <div id="menu">
+             <ul>
+                <li><a class="a" id="clickmenu" href="#" onclick="openMenu()">Menu <i class="fas fa-chevron-down fa-xs"></i></a>
+                    <nav class="nav">
+                        <div>
+                     <ul id="dropdown" style="display:none">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="store.html">Loja</a></li>
+                        <li><a href="servicos.html">Serviços</a></li>
+                        <li><a href="#">Cria a tua ID</a></li>
+                        <li><a href="aboutus.html">Sobre nós</a></li>
+                        <li><a href="parcerias.html">Parcerias</a></li>
+                        <li><a href="contato.html">Contactos</a></li>
+                     </ul></div>
+                    </nav> 
+                </li>
+             </ul>
+         </div>
+         <div id="logo">
+             <img class="logo" src="resources/images/preto.jpg">
+         </div>
+         <div id="contactos">
+             <a class="fac" href="#"><i class="fa fa-facebook fa-lg"></i></a>
+             <a class="ins" href="#"><i class="fa fa-instagram fa-lg"></i></a>
+         </div>
+     </div>
+ </header>  
+ <br>
+ <br>
+ <br>
+ 
+
+ <body>
+    
+    <div class="conteudoserv">
+        <h2>DS Marketing </h2>
+        
+        <span class="texto">
+            <br>
+            <br>
+            <br>
+            <h4>Email: DSmarketing@hotmail.com</h4>
+            
+            <iframe class="imgserv" src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d2986.856748284603!2d-8.765183487241453!3d41.52904356055212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1szona%20industrial%20esposende!5e0!3m2!1spt-PT!2smk!4v1583312070295!5m2!1spt-PT!2smk" width="800" height="650" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+            <h4>Morada: Travessa dos combatentes, Esposende, Braga 4740-596</h4>
+        </span>
+        
+        <br>
+        <h4>Estamos ao seu dispor para esclarecimento de duvidas. </h4>
+            <br>
+            <a class="btserv" data-modal-target="#modal" href="#">Formulário</a>
+    </div>
+    
+    <section id="formulario">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+              <div class="title">Formulário de contato</div>
+              <button data-close-button class="close-button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="https://formspree.io/mzbgkyop" method="POST" class="p-5 bg-white">
+    
+                    <div class="row form-group">
+                        <div class="col-md-12 mb-3 mb-md-0">
+                            <label class="font-weight-bold" for="fullname">Nome:</label>
+                            <input type="text" id="nome" class="form-control" name="nome" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <label class="font-weight-bold" for="email">E-mail:</label>
+                            <input type="email" id="mail" class="form-control" name="mail" required>
+                        </div>
+                    </div>
+                    <label class="font-weight-bold" for="message">Mensagem:</label>
+                    <div class="row form-group mb-4">
+                        <div class="col-md-12">
+                            
+                            <textarea name="messagem" id="messagem" cols="30" rows="5" class="form-control1"
+                                placeholder="Estamos ao dispor para resolver as suas duvidas..."></textarea>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" value="Enviar Menssagem"
+                                class="btnformulario">
+                        </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+          <div id="overlay"></div></section>
+
+
+    <footer>
+        <section class="footer">
+        <ul class="list1" id="lista1">
+            <li><a href="aboutus.html">Sobre nós</a></li>
+            <li><a href="store.html">A loja</a></li>
+            <li><a href="#">Cria a identidade da tua empresa</a></li>
+            <li><a href="servicos.html">Serviços</a></li>
+        </ul>
+        <nav class="newsletter">
+            <h3>Subscreve para receber informações</h3>
+            <div><a id="buttonsub" href="#">Subscreve</a></div>
+            <div class="redes">
+                <a class="fac" href="#"><i class="fa fa-facebook fa-lg"></i></a>
+                <a class="ins" href="#"><i class="fa fa-instagram fa-lg"></i></a>
+        </div>
+        </nav>
+        <ul class="list1" id="lista2">
+            <li><a href="contato.html">Contacto</a></li>
+            <li><a href="parcerias.html">Parcerias</a></li>
+            <li><a href="#">Devoluçoes</a></li>
+            <li><a href="#">Politicas de privacidade</a></li>
+        </ul>
+    </section>
+    </footer>
+
+    <nav class="design">
+        <span>© 2020 DS, All Rights Reserved | Created by MS</span>
+        
+        <script>
+            function openMenu() {
+             var click = document.getElementById("dropdown") ;
+              if(click.style.display === "none"){
+                  click.style.display = "flex" ;
+              }else{ 
+                  click.style.display = "none" ;
+              }
+            }
+         </script>
+    
+    </nav>
+
+    
+
+</body>
+</html>

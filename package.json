@@ -1,0 +1,27 @@
+{
+  "name": "dsdrucker1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "C:/Users/Marcio/dsdrucker1/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "express-formidable": "^1.2.0",
+    "mysql": "^2.18.1",
+    "react-stripe-checkout": "^2.6.3",
+    "stripe": "^8.39.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  }
+}

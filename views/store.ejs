@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title> DS </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="DS">
+    <meta name="description" content="T-shirts">
+    <meta name="keywords" content="T-shirts">
+    <link href="css/all.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <meta name="description" content="This is the description">
+    <link rel="stylesheet" href="resources/css/style.css" />
+    <script src="store.js" async></script>
+    <script type="text/javascript"></script>
+    <script src="pagination.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js">
+    </script>
+    <script defer src="popup.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+
+</head>
+
+<body>
+    <header>
+        <div class="content" id="navbar">
+            <div id="menu">
+                <ul>
+                    <li><a class="a" id="clickmenu" href="#" onclick="openMenu()">Menu <i class="fas fa-chevron-down fa-xs"></i></a>
+                        <nav class="nav">
+                            <div>
+                                <ul id="dropdown" style="display:none">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="store.html">Loja</a></li>
+                                    <li><a href="servicos.html">Serviços</a></li>
+                                    <li><a href="#">Cria a tua ID</a></li>
+                                    <li><a href="aboutus.html">Sobre nós</a></li>
+                                    <li><a href="parcerias.html">Parcerias</a></li>
+                                    <li><a href="contato.html">Contactos</a></li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </li>
+                </ul>
+            </div>
+            <div id="logo">
+                <img class="logo" src="resources/images/preto.jpg">
+            </div>
+            <div id="contactos">
+                <a class="fac" href="#"><i class="fa fa-facebook fa-lg"></i></a>
+                <a class="ins" href="#"><i class="fa fa-instagram fa-lg"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <br>
+    <br>
+    <br>
+
+    <div class="carticon">
+
+        <span style="font-size: 35px;" id="cart"><a href="#cartsection"><i class="fas fa-shopping-cart "></a></i></span>
+
+        <div id="filterList">
+            <span class="listclass">   
+    <label id="tudo" for="bt.todos" >Todos </label> 
+    <input type="radio" name="bt" id="bt.todos" value="selectt">
+    </span>
+
+            <span class="listclass">  
+    <label>T-shirts</label>
+    <input type="radio"  id="bt-tshirts" name="bt" value="T-shirts">
+</span>
+
+            <span class="listclass"> 
+    <label id="camisolasfilter" for="bt.camisolas">Camisolas</label> 
+    <input type="radio" name="bt" id="bt.camisolas" value="Camisolas">
+</span>
+
+            <span class="listclass"> 
+    <label >Bonés</label> 
+    <input type="radio" name="bt" id="bt.bones" value="bones">
+</span>
+
+            <span class="listclass"> 
+    <label >Vestuário de trabalho</label> 
+    <input type="radio" name="bt" id="bt.trabalho" value="trabalho">
+</span>
+        </div>
+
+        <section class="container content-section">
+
+            <div class="shop-items" id="gridshop" name="grid">
+                <div class="T-shirts selectt">
+                    <div class="shop-item">
+
+                        <img class="shop-item-image" src="resources/images/tshirt/makito keya 130 0.89.jpg">
+                        <div class="shop-item-details">
+                            <table>
+                                <span class="shop-item-title">Makito keya 130</span>
+                                <nav>
+                                    <table>
+                                        <tr>
+                                            <td class="priceCell">0.89€ </td>
+                                            <td>
+                                                <input type="number" class="form-control3 text-center quantity" min="1" max="999" value="1">
+                                            </td>
+                                        </tr>
+                                        <button class="btn btn-primary shop-item-button" class="buttonadd" type="button">To Cart </button>
+                                        <span class="shop-item-price1" id="1">€0.89</span>
+                                    </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="T-shirts selectt">
+                    <div class="shop-item">
+                        <img class="shop-item-image" src="resources/images/tshirt/roly atomic 150 1.jpg">
+                        <div class="shop-item-details">
+                            <table>
+                                <span class="shop-item-title">Roly Atomic 150</span>
+                                <nav>
+                                    <table>
+                                        <tr>
+                                            <td class="priceCell">1.05 €</td>
+                                            <td>
+                                                <input type="number" class="form-control3 text-center quantity" min="1" max="999" value="1">
+                                            </td>
+                                        </tr>
+                                        <button class="btn btn-primary shop-item-button" class="buttonadd" type="button">To Cart </button>
+                                        <span class="shop-item-price1" id="2">€1.05</span>
+                                    </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bones selectt">
+                    <div class="shop-item">
+                        <img class="shop-item-image" src="resources/images/chapeu/chapeu 1.jpg">
+                        <div class="shop-item-details">
+                            <table>
+                                <span class="shop-item-title">Sol's sunny</span>
+                                <nav>
+                                    <table>
+                                        <tr>
+                                            <td class="priceCell">0.86€</td>
+                                            <td>
+                                                <input type="number" class="form-control3 text-center quantity" min="1" max="999" value="1">
+                                            </td>
+                                        </tr>
+                                        <button class="btn btn-primary shop-item-button" class="buttonadd" type="button">To Cart </button>
+                                        <span class="shop-item-price1" id="3">€0.86</span>
+                                    </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="T-shirts selectt">
+                    <div class="shop-item">
+                        <img class="shop-item-image" src="resources/images/tshirt/makito hecom 1.05.jpg">
+                        <div class="shop-item-details">
+                            <table>
+                                <span class="shop-item-title">MAkito Hecom</span>
+                                <nav>
+                                    <table>
+                                        <tr>
+                                            <td class="priceCell">1.05€</td>
+                                            <td>
+                                                <input type="number" class="form-control3 text-center quantity" min="1" max="999" value="1">
+                                            </td>
+                                        </tr>
+                                        <button class="btn btn-primary shop-item-button" class="buttonadd" type="button">To Cart </button>
+                                        <span class="shop-item-price1" id="4">€1.05</span>
+                                    </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="T-shirts selectt">
+                    <div class="shop-item">
+                        <img class="shop-item-image" src="resources/images/tshirt/sols regent 1.24.jpg">
+                        <div class="shop-item-details">
+                            <table>
+                                <span class="shop-item-title">Sol's Regent</span>
+                                <nav>
+                                    <table>
+                                        <tr>
+                                            <td class="priceCell">1.24€</td>
+                                            <td>
+                                                <input type="number" class="form-control3 text-center quantity" min="1" max="999" value="1">
+                                            </td>
+                                        </tr>
+                                        <button class="btn btn-primary shop-item-button" class="buttonadd" type="button">To Cart </button>
+                                        <span class="shop-item-price1" id="5">€1.24</span>
+                                    </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="T-shirts selectt">
+                    <div class="shop-item">
+                        <div class="tshirts">
+                            <img class="shop-item-image" src="resources/images/tshirt/bec new 1.25.jpg">
+                            <div class="shop-item-details">
+                                <table>
+                                    <span class="shop-item-title">B&C New   120  </span>
+                                    <nav>
+                                        <table>
+                                            <tr>
+                                                <td class="priceCell">1.25€</td>
+                                                <td>
+                                                    <input type="number" class="form-control3 text-center quantity" min="1" max="999" value="1">
+                                                </td>
+                                            </tr>
+                                            <button class="btn btn-primary shop-item-button" class="buttonadd" type="button">To Cart </button>
+                                            <span class="shop-item-price1" id="6">€1.25</span>
+                                        </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="Camisolas selectt">
+                    <div class="shop-item">
+                        <img class="shop-item-image" src="resources/images/sweat/Fruit Manga Inserida 5.37.jpg">
+                        <div class="shop-item-details">
+                            <table>
+                                <span class="shop-item-title">Fruit Manga Inserida<br></span>
+                                <nav>
+                                    <table>
+                                        <tr>
+                                            <td class="priceCell">5.37€ </td>
+                                            <td>
+                                                <input type="number" class="form-control3 text-center quantity" min="1" max="999" value="1">
+                                            </td>
+                                        </tr>
+                                        <button class="btn btn-primary shop-item-button" class="buttonadd" type="button">To Cart </button>
+                                        <span class="shop-item-price1" id="7">€5.37</span>
+                                    </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="trabalho selectt">
+                    <div class="shop-item">
+                        <img class="shop-item-image" src="resources/images/trabalho/JN Alta Visibilidade JN 815 2.43.jpg">
+                        <div class="shop-item-details">
+                            <table>
+                                <span class="shop-item-title">SJN Alta Visibilidade JN 815</span>
+                                <nav>
+                                    <table>
+                                        <tr>
+                                            <td class="priceCell">2.43€</td>
+                                            <td>
+                                                <input type="number" class="form-control3 text-center quantity" min="1" max="999" value="1">
+                                            </td>
+                                        </tr>
+                                        <button class="btn btn-primary shop-item-button" class="buttonadd" type="button">To Cart </button>
+                                        <span class="shop-item-price1" id="8">€2.43</span>
+                                    </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('input[type="radio"]').click(function() {
+                        var inputValue = $(this).attr("value");
+                        var targetBox = $("." + inputValue);
+                        $(".selectt").not(targetBox).hide();
+                        $(targetBox).show();
+                    });
+                });
+            </script>
+
+        </section>
+
+        <section class="container content-section" id="compras">
+
+            <div class="cart-row" id="cartrow">
+
+                <h2>Cart</h2>
+            </div>
+
+            <div class="cart-items">
+
+            </div>
+            <div class="cart-total">
+                <strong class="cart-total-title">Total</strong>
+                <span class="cart-total-price">€0</span>
+            </div>
+            <button class="btn btn-primary btn-purchase" id="btncomprar" type="button">Comprar</button>
+            <div class="shipping_box" style="margin-left: 854px;margin-top: 60px;">
+                <br>
+                <b>Shipping Method:</b><br>
+               
+                <select name="shipping_method" class="shipping_method">
+                    <%  for (let method of shipping_method_arr.shipping_method){ %>
+                        <option><%= method.name %></option>
+                    <% } %>
+                </select>
+                <br>
+                <label><b>Recept</b></label><br>
+                <input type="text" name="recept" class="recept"><br>
+
+                <br>
+                <label><b>Street</b></label><br>
+                <input type="text" name="street" class="street"><br>
+
+                <br>
+                <label><b>State</b></label><br>
+                <input type="text" name="state" class="state"><br>
+
+                <br>
+                <label><b>Country</b></label><br>
+                <input type="text" name="country" class="country"><br>
+
+                <b>Other Info.</b><br>
+                <textarea placeholder="Enter Ohter info" name="other_info" class="other_info" rows="10" cols="50"></textarea>
+            </div>  
+            <div id="paypal-button-container"></div>
+            
+           
+            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"></script>
+            <form id="myForm" action="/charge" method="POST"></form>
+                <input type="hidden" id="stripeToken" name="stripeToken" />
+                <input type="hidden" id="stripeEmail" name="stripeEmail" />
+                <input type="hidden" id="amountInCents" name="amountInCents" />
+            </form>
+            <input type="button" id="customButton" value="Pay with Stripe">
+
+		</section>
+        <footer>
+            <section class="footer">
+                <ul class="list1" id="lista1">
+                    <li><a href="aboutus.html">Sobre nós</a></li>
+                    <li><a href="store.html">Loja</a></li>
+                    <li><a href="#">Cria a identidade da tua empresa</a></li>
+                    <li><a href="servicos.html">Serviços</a></li>
+                </ul>
+                <nav class="newsletter">
+                    <h3>Subscreve para receber informações</h3>
+                    <div><a id="buttonsub" href="#">Subscreve</a></div>
+                    <div class="redes">
+                        <a class="fac" href="#"><i class="fa fa-facebook fa-lg"></i></a>
+                        <a class="ins" href="#"><i class="fa fa-instagram fa-lg"></i></a>
+                    </div>
+                </nav>
+                <ul class="list1" id="lista2">
+                    <li><a href="contato.html">Contacto</a></li>
+                    <li><a href="parcerias.html">Parcerias</a></li>
+                    <li><a href="#">Devoluçoes</a></li>
+                    <li><a href="#">Politicas de privacidade</a></li>
+                </ul>
+            </section>
+        </footer>
+
+        <nav class="design">
+            <span>© 2020 DS, All Rights Reserved | Created by MS</span>
+
+        </nav>
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/fullclip.min.js"></script>
+        <script src="pagination.js"></script>
+        <script src="js/card.js"></script>
+
+        <script src="https://www.paypal.com/sdk/js?client-id=AWBQbXluQiRbvYKeOC_5-Oo5oFyvkHhIOk6LEBk80XbS51mLZDARtS2EdoZMD3v9Gnl-jD8tw7Jz3_xd&currency=EUR">
+        </script>
+        <script>
+            function openMenu() {
+                var click = document.getElementById("dropdown");
+                if (click.style.display === "none") {
+                    click.style.display = "flex";
+                } else {
+                    click.style.display = "none";
+                }
+            }
+        </script>
+
+        <script>
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: '0.01'
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        alert('Transaction completed by ' + details.payer.name.given_name);
+                        // Call your server to save the transaction
+                        return fetch('/paypal-transaction-complete', {
+                            method: 'post',
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                orderID: data.orderID
+                            })
+                        });
+                    });
+                }
+            }).render('#paypal-button-container');
+        </script>
+
+        <script>
+            $('.quantity').on('change', getTotals);
+
+            function getTotals() {
+                var totals = $('.quantity').map(function() {
+                    var $tr = $(this).closest('tr');
+                    return parseFloat($tr.find('.priceCell').text()) * parseInt($(this).val(), 10);
+                }).get();
+                console.log(totals);
+                document.getElementById('1').innerText = '€' + parseFloat(totals[0]).toFixed(2)
+            }
+        </script>
+
+        <script>
+            $('.quantity').on('change', getTotals);
+
+            function getTotals() {
+                var totals = $('.quantity').map(function() {
+                    var $tr = $(this).closest('tr');
+                    return parseFloat($tr.find('.priceCell').text()) * parseInt($(this).val(), 10);
+                }).get();
+                console.log(totals);
+                document.getElementById('2').innerText = '€' + parseFloat(totals[1]).toFixed(2)
+            }
+        </script>
+
+        <script>
+            $('.quantity').on('change', getTotals);
+
+            function getTotals() {
+                var totals = $('.quantity').map(function() {
+                    var $tr = $(this).closest('tr');
+                    return parseFloat($tr.find('.priceCell').text()) * parseInt($(this).val(), 10);
+                }).get();
+                console.log(totals);
+                document.getElementById('3').innerText = '€' + parseFloat(totals[2]).toFixed(2)
+            }
+        </script>
+
+        <script>
+            $('.quantity').on('change', getTotals);
+
+            function getTotals() {
+                var totals = $('.quantity').map(function() {
+                    var $tr = $(this).closest('tr');
+                    return parseFloat($tr.find('.priceCell').text()) * parseInt($(this).val(), 10);
+                }).get();
+                console.log(totals);
+                document.getElementById('4').innerText = '€' + parseFloat(totals[3]).toFixed(2)
+            }
+        </script>
+        <script>
+            $('.quantity').on('change', getTotals);
+
+            function getTotals() {
+                var totals = $('.quantity').map(function() {
+                    var $tr = $(this).closest('tr');
+                    return parseFloat($tr.find('.priceCell').text()) * parseInt($(this).val(), 10);
+                }).get();
+                console.log(totals);
+                document.getElementById('5').innerText = '€' + parseFloat(totals[4]).toFixed(2)
+            }
+        </script>
+        <script>
+            $('.quantity').on('change', getTotals);
+
+            function getTotals() {
+                var totals = $('.quantity').map(function() {
+                    var $tr = $(this).closest('tr');
+                    return parseFloat($tr.find('.priceCell').text()) * parseInt($(this).val(), 10);
+                }).get();
+                console.log(totals);
+                document.getElementById('6').innerText = '€' + parseFloat(totals[5]).toFixed(2)
+            }
+        </script>
+
+        <script>
+            $('.quantity').on('change', getTotals);
+
+            function getTotals() {
+                var totals = $('.quantity').map(function() {
+                    var $tr = $(this).closest('tr');
+                    return parseFloat($tr.find('.priceCell').text()) * parseInt($(this).val(), 10);
+                }).get();
+                console.log(totals);
+                document.getElementById('7').innerText = '€' + parseFloat(totals[6]).toFixed(2)
+            }
+        </script>
+        <script>
+            $('.quantity').on('change', getTotals);
+
+            function getTotals() {
+                var totals = $('.quantity').map(function() {
+                    var $tr = $(this).closest('tr');
+                    return parseFloat($tr.find('.priceCell').text()) * parseInt($(this).val(), 10);
+                }).get();
+                console.log(totals);
+                document.getElementById('8').innerText = '€' + parseFloat(totals[7]).toFixed(2)
+            }
+        </script>
+
+</body>
+
+</html>
