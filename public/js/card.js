@@ -131,7 +131,7 @@ $(document).ready(function(){
         return a + b;
     }, 0);
 
-    //console.log(sum,'sum')
+    console.log(sum,'sum')
     //amt = sum / 100;
     amt = sum;
     console.log(amt,'amt');
