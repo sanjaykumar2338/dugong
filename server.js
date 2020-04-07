@@ -56,22 +56,8 @@ app.get('/stripe_payment', function(req, res) {
   res.render('charge.ejs');
 });
 
-app.post("/charge", async  (req, res) => {
-  console.log(req);
-
-  /*const charge = await stripe.charges.create({
-    amount: 999,
-    currency: 'eur',
-    source: 'tok_visa',
-    receipt_email: 'jenny.rosen@example.com',
-  }).then(function() {
-    console.log('Charge Successful')
-    res.json({ message: 'Successfully purchased items' })
-  }).catch(function() {
-    console.log('Charge Fail')
-    res.status(500).end()
-  });
-  */
+app.get("/admin", async  (req, res) => {
+  res.render('admin/main.ejs');
 });
 
 app.post('/checkout', function(req, res) {
