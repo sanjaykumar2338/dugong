@@ -56,10 +56,6 @@ app.get('/stripe_payment', function(req, res) {
   res.render('charge.ejs');
 });
 
-app.get("/admin", async  (req, res) => {
-  res.render('admin/main.ejs');
-});
-
 app.post('/checkout', function(req, res) {
       const itemsArray = req.body.items;
       let total = 0
@@ -107,5 +103,18 @@ app.post('/checkout', function(req, res) {
         res.status(500).end()
       })
 })
+
+//Manage All the routes of Admin
+var year = new Date().getFullYear();
+app.get("/admin", async  (req, res) => {
+  res.render('admin/main.ejs',{year:year});
+});
+
+app.get("/admin/product", async  (req, res) => {
+  res.render('admin/products.ejs',{year:year});
+});
+
+
+
 
 app.listen(4000)
