@@ -1,0 +1,41 @@
+<%- include('./../header') %>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800">Manage Categories</h1>
+			
+			<% if(locals.message.success){ %>
+			<div class="alert alert-success" role="alert">
+				<%=message.success%>
+			</div>
+			<% } %>
+		   <table id="product_table" class="display" style="width:100%">
+        <thead>
+			
+            <tr>
+				<th>Sr. No.<th>
+                <th>Category Name</th>
+                <th>Action</th>
+            </tr>
+			
+        </thead>
+        <tbody>
+             <%  for (let index in result){ %>
+            <tr>
+                <th><%= parseInt(index)+parseInt(1) %><th>
+                <th><%= result[index].name %></th>
+                <th><a href="./delete_category?id=<%= result[index].id %>"><i class="fa fa-trash"></i></a> | <i class="fas fa-edit"></i></th>
+            </tr>
+			<% } %>
+        </tbody>
+    </table>	
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+	  
+<%- include('./../footer') %>

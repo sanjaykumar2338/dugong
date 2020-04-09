@@ -14,11 +14,17 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.5",
     "ejs": "^3.0.2",
     "express": "^4.17.1",
+    "express-flash-messages": "^0.1.1",
     "express-formidable": "^1.2.0",
+    "express-session": "^1.17.0",
     "mysql": "^2.18.1",
+    "nodemon": "^2.0.2",
     "react-stripe-checkout": "^2.6.3",
+    "req-flash": "0.0.3",
     "stripe": "^8.39.0"
   },
   "devDependencies": {

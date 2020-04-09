@@ -1,0 +1,26 @@
+<%- include('./../header') %>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800">Add Category</h1>
+		   <form action="./savecategory" method="POST">
+			  
+			  <div class="form-group">
+				<label for="exampleInputPassword1">Category Name</label>
+				<input type="text" class="form-control" id="name" required placeholder="Category Name" name="name">
+			  </div>
+			  
+			  
+			  
+			  <button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+	  
+<%- include('./../footer') %>
