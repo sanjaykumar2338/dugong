@@ -42,7 +42,7 @@ var db_config = {
 //- Create the connection variable
 var connection = mysql_npm.createConnection(db_config)
 
-
+//console.log(connection,'testing');
 
 app.get('/store', function(req, res) {
   fs.readFile('items.json', function(error, data) {
@@ -135,14 +135,31 @@ app.get("/admin/product", async  (req, res) => {
 });
 
 app.get("/admin/padd", async  (req, res) => {
-  res.render('admin/product/new_product.ejs',{year:year});
+	//const users = await connection.query( 'SELECT * FROM category' );
+	(async () => {
+	  try {
+		const rows = await connection.query('SELECT * FROM category');
+		console.log(rows);
+	  } finally {
+		//conn.end();
+	  }
+	})();
+	
+	//console.log(users,'users');
+    connection.query('Select * from category order by updated_at DESC', function(err,result) {
+		res.render('admin/product/new_product.ejs',{year:year,category:result});
+	});
+	
+    
+  
+    
 });
 
 //For Category
 app.get("/admin/category", async  (req, res) => {
   res.locals.message = req.flash();
 	
-  connection.query('Select * from category', function(err,result) {
+  connection.query('Select * from category order by updated_at DESC', function(err,result) {
 	  res.render('admin/category/index.ejs',{year:year,result:result});
   });	  
 
@@ -158,25 +175,247 @@ app.post("/admin/savecategory", async  (req, res) => {
 	var values = [];
 	values.push([name]);
 	
+	var error = '';
 	connection.query('INSERT INTO category (name) VALUES ?', [values], function(err,result) {
 		if(err) {
-		  console.log('insert error',err);
+		  error = 'SQL ERROR';
 		}
 		else {
-		  console.log('inserted success');
+		  error = 'Category added successfully';
 		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/category');
 	});
-	
-	res.redirect('/admin/category');
 });
 
 app.get("/admin/delete_category", async  (req, res) => {
 	let id = req.query.id;
 	
 	var sql = "DELETE FROM category WHERE id = '"+id+"'";
+	var error = '';
     connection.query(sql, function(err,result) {
-		req.flash('success', 'Category Deleted successfully');
+		if(err) {
+		  error = 'SQL ERROR OR ID NOT FOUND';
+		}
+		else {
+		  error = 'Category Deleted successfully';
+		}
+		
+		req.flash('success',error);
 		res.redirect('/admin/category');
+	});
+});
+
+app.get("/admin/edit_category", async  (req, res) => {
+	let id = req.query.id;
+	
+	var sql = "SELECT * FROM category WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		   req.flash('success','SQL ERROR OR ID NOT FOUND');
+		   res.redirect('/admin/category');
+		}
+		else {
+		   var result = JSON.parse(JSON.stringify(result));
+		   res.render('admin/category/edit.ejs',{year:year,result:result[0]});
+		}
+	});
+});
+
+app.post("/admin/save_edit_category", async  (req, res) => {
+	let id = req.query.id;
+	
+	var name = req.body.name;
+	var sql = "UPDATE category SET name='"+name+"' WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		   error = 'SQL ERROR OR ID NOT FOUND';
+		}
+		else {
+		   error = 'Category updated successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/category');
+	});
+});
+
+//For SIZE
+app.get("/admin/size", async  (req, res) => {
+  res.locals.message = req.flash();
+	
+  connection.query('Select * from size order by updated_at DESC', function(err,result) {
+	  res.render('admin/size/index.ejs',{year:year,result:result});
+  });	  
+
+});
+
+app.get("/admin/sadd", async  (req, res) => {
+  res.render('admin/size/add.ejs',{year:year});
+});
+
+app.post("/admin/savesize", async  (req, res) => {
+	var name = req.body.name;
+	
+	var values = [];
+	values.push([name]);
+	
+	var error = '';
+	connection.query('INSERT INTO size (name) VALUES ?', [values], function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR';
+		}
+		else {
+		  error = 'Size added successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/size');
+	});
+});
+
+app.get("/admin/delete_size", async  (req, res) => {
+	let id = req.query.id;
+	
+	var sql = "DELETE FROM size WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR OR ID NOT FOUND';
+		}
+		else {
+		  error = 'Size Deleted successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/size');
+	});
+});
+
+app.get("/admin/edit_size", async  (req, res) => {
+	let id = req.query.id;
+	
+	var sql = "SELECT * FROM size WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		   req.flash('success','SQL ERROR OR ID NOT FOUND');
+		   res.redirect('/admin/size');
+		}
+		else {
+		   var result = JSON.parse(JSON.stringify(result));
+		   res.render('admin/size/edit.ejs',{year:year,result:result[0]});
+		}
+	});
+});
+
+app.post("/admin/save_edit_size", async  (req, res) => {
+	let id = req.query.id;
+	
+	var name = req.body.name;
+	var sql = "UPDATE size SET name='"+name+"' WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		   error = 'SQL ERROR OR ID NOT FOUND';
+		}
+		else {
+		   error = 'Size updated successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/size');
+	});
+});
+
+//For Country
+app.get("/admin/country", async  (req, res) => {
+  res.locals.message = req.flash();
+	
+  connection.query('Select * from country order by updated_at DESC', function(err,result) {
+	  res.render('admin/country/index.ejs',{year:year,result:result});
+  });	  
+
+});
+
+app.get("/admin/coadd", async  (req, res) => {
+  res.render('admin/country/add.ejs',{year:year});
+});
+
+app.post("/admin/savecountry", async  (req, res) => {
+	var name = req.body.name;
+	
+	var values = [];
+	values.push([name]);
+	
+	var error = '';
+	connection.query('INSERT INTO country (name) VALUES ?', [values], function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR';
+		}
+		else {
+		  error = 'Country added successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/country');
+	});
+});
+
+app.get("/admin/delete_country", async  (req, res) => {
+	let id = req.query.id;
+	
+	var sql = "DELETE FROM country WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR OR ID NOT FOUND';
+		}
+		else {
+		  error = 'Country Deleted successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/country');
+	});
+});
+
+app.get("/admin/edit_country", async  (req, res) => {
+	let id = req.query.id;
+	
+	var sql = "SELECT * FROM country WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		   req.flash('success','SQL ERROR OR ID NOT FOUND');
+		   res.redirect('/admin/country');
+		}
+		else {
+		   var result = JSON.parse(JSON.stringify(result));
+		   res.render('admin/country/edit.ejs',{year:year,result:result[0]});
+		}
+	});
+});
+
+app.post("/admin/save_edit_country", async  (req, res) => {
+	let id = req.query.id;
+	
+	var name = req.body.name;
+	var sql = "UPDATE country SET name='"+name+"' WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		   error = 'SQL ERROR OR ID NOT FOUND';
+		}
+		else {
+		   error = 'Country updated successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/country');
 	});
 });
 

@@ -5,19 +5,17 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">Edit Category</h1>
-			<form action="./save_edit_category?id=<%= result.id %>" method="POST">
+          <h1 class="h3 mb-4 text-gray-800">Add Size</h1>
+		   <form action="./savesize" method="POST">
 			  
 			  <div class="form-group">
-				<label for="exampleInputPassword1">Category Name</label>
-				<input type="text" class="form-control" value="<%= result.name %>" id="name" required placeholder="Category Name" name="name">
+				<label for="exampleInputPassword1">Size Name</label>
+				<input type="text" class="form-control" id="name" required placeholder="Size Name" name="name">
 			  </div>
 			  
 			  
 			  
 			  <button type="submit" class="btn btn-primary">Submit</button>
-			</form>
-			
 			</form>
         </div>
         <!-- /.container-fluid -->

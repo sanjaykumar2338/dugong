@@ -5,7 +5,7 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">Manage Categories</h1>
+          <h1 class="h3 mb-4 text-gray-800">Manage Sizes</h1>
 			
 			<% if(locals.message.success){ %>
 			<div class="alert alert-success" role="alert">
@@ -17,7 +17,7 @@
 			
             <tr>
 				<th>Sr. No.<th>
-                <th>Category Name</th>
+                <th>Size Name</th>
                 <th>Action</th>
             </tr>
 			
@@ -27,7 +27,7 @@
             <tr>
                 <th><%= parseInt(index)+parseInt(1) %><th>
                 <th><%= result[index].name %></th>
-                <th><a href="./delete_category?id=<%= result[index].id %>"><i class="fa fa-trash"></i></a> | <a href="./edit_category?id=<%= result[index].id %>"><i class="fas fa-edit"></a></i></th>
+                <th><a href="./delete_size?id=<%= result[index].id %>"><i class="fa fa-trash"></i></a> | <a href="./edit_size?id=<%= result[index].id %>"><i class="fas fa-edit"></a></i></th>
             </tr>
 			<% } %>
         </tbody>
