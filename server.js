@@ -135,24 +135,13 @@ app.get("/admin/product", async  (req, res) => {
 });
 
 app.get("/admin/padd", async  (req, res) => {
-	//const users = await connection.query( 'SELECT * FROM category' );
-	(async () => {
-	  try {
-		const rows = await connection.query('SELECT * FROM category');
-		console.log(rows);
-	  } finally {
-		//conn.end();
-	  }
-	})();
-	
-	//console.log(users,'users');
-    connection.query('Select * from category order by updated_at DESC', function(err,result) {
-		res.render('admin/product/new_product.ejs',{year:year,category:result});
+	connection.query( 'SELECT * FROM category', function(err1,category_res) {
+		connection.query( 'SELECT * FROM country', function(err2,country_res) {
+			connection.query( 'SELECT * FROM size', function(err3,size_res) {
+				res.render('admin/product/new_product.ejs',{year:year,category:category_res,country:country_res,size:size_res});
+			});	
+		});	
 	});
-	
-    
-  
-    
 });
 
 //For Category
