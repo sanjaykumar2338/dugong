@@ -6,52 +6,63 @@
 
           <!-- Page Heading -->
           <h1 class="h3 mb-4 text-gray-800">Add New Product</h1>
-		   <form>
+		   <form method="POST" action="./save_product" enctype="multipart/form-data">
 			  <div class="form-group">
 				<label for="exampleInputEmail1">Category Type</label>
 				<select class="form-control" id="category" name="category">
+				    <option>Choose Category</option> 
 					<%  for (let index in category){ %>
 					  <option value="<%= category[index].id %>"><%= category[index].name %></option>
-					<% } %>  
-				</select>
-			  </div>
-			  <div class="form-group">
-				<label for="exampleInputPassword1">Title</label>
-				<input type="text" class="form-control" id="title" placeholder="Title" name="title">
-			  </div>
-			  
-			  <div class="form-group">
-				<label for="exampleFormControlTextarea1">Description</label>
-				<textarea class="form-control" name="description" id="description" rows="3"></textarea>
-				</div>
-			  
-			   <div class="form-group">
-				<label for="exampleInputPassword1">Price</label>
-				<input type="number" class="form-control" id="price" placeholder="Price" name="price">
-			  </div>
-			  
-			   
-			    <div class="form-group">
-				<label for="exampleInputEmail1">Size</label>
-				<select class="form-control" id="size" name="size">
-					<%  for (let index in size){ %>
-					  <option value="<%= size[index].id %>"><%= size[index].name %></option>
 					<% } %>  
 				</select>
 			  </div>
 			  
 			    <div class="form-group">
 				<label for="exampleInputEmail1">Available Countries</label>
+				
 				<select class="form-control" id="country" name="country">
+					<option>Choose Country</option> 
 					<%  for (let index in country){ %>
 					  <option value="<%= country[index].id %>"><%= country[index].name %></option>
 					<% } %>  
 				</select>
 			  </div>
+			  
+			   <div class="form-group">
+				<label for="exampleInputEmail1">Size</label>
+				
+				<select class="form-control" id="size" name="size">
+				    <option>Choose Size</option> 
+					<%  for (let index in size){ %>
+					  <option value="<%= size[index].id %>"><%= size[index].name %></option>
+					<% } %>  
+				</select>
+			  </div>
+			  
+			  
+			  <div class="form-group">
+				<label for="exampleInputPassword1">Title</label>
+				<input type="text" class="form-control" required id="title" placeholder="Title" name="title">
+			  </div>
+			  
+			  <div class="form-group">
+				<label for="exampleFormControlTextarea1">Description</label>
+				<textarea class="form-control" name="description" required id="description" placeholder="Description" rows="3"></textarea>
+				</div>
+			  
+			   <div class="form-group">
+				<label for="exampleInputPassword1">Price</label>
+				<input type="number" class="form-control" step=".01" id="price" required placeholder="Price" name="price">
+			  </div>
+			  
+			   
+			   
+			  
+			  
 				
 				<div class="form-group">
 					<label for="exampleFormControlFile1">Choose Images:</label>
-					<input type="file" multiple class="form-control-file" id="images" name="images">
+					<input type="file" required class="form-control-file" id="images" name="images" accept="image/x-png,image/gif,image/jpeg" />
 				  </div>
 			  
 			  <button type="submit" class="btn btn-primary">Submit</button>

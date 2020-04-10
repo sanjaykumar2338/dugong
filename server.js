@@ -6,6 +6,8 @@ const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 
 const express = require('express')
+const path = require('path');
+const crypto = require('crypto');
 const fs = require('fs')
 const stripe = require('stripe')(stripeSecretKey)
 var bodyParser = require('body-parser');
@@ -13,6 +15,8 @@ let mysql = require('mysql');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
+var multer  = require('multer');
+var upload = multer({ dest: 'uploads/' });
 
 const app = express();
 
@@ -131,7 +135,10 @@ app.get("/admin", async  (req, res) => {
 });
 
 app.get("/admin/product", async  (req, res) => {
-  res.render('admin/product/products.ejs',{year:year});
+	res.locals.message = req.flash();
+	connection.query('Select product.id as product_id,product.title,product.description,product.price,product.image,product.image_org_name,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc', function(err,result) {
+		res.render('admin/product/products.ejs',{year:year,result:result});
+	});
 });
 
 app.get("/admin/padd", async  (req, res) => {
@@ -141,6 +148,77 @@ app.get("/admin/padd", async  (req, res) => {
 				res.render('admin/product/new_product.ejs',{year:year,category:category_res,country:country_res,size:size_res});
 			});	
 		});	
+	});
+});
+
+app.get("/admin/edit_product", async  (req, res) => {
+	let id = req.query.id;
+	var sql = "Select * from product WHERE id = '"+id+"'";
+	
+	connection.query(sql, function(err,product_response) {
+		var product_res = JSON.parse(JSON.stringify(product_response));
+		
+		connection.query( 'SELECT * FROM category', function(err1,category_res) {
+			connection.query( 'SELECT * FROM country', function(err2,country_res) {
+				connection.query( 'SELECT * FROM size', function(err3,size_res) {
+					res.render('admin/product/edit_product.ejs',{year:year,category:category_res,country:country_res,size:size_res,product:product_res[0]});
+				});	
+			});	
+		});
+	});
+});
+
+app.post("/admin/save_product", async  (req, res) => {	
+	
+	let upload = multer({
+	storage: multer.diskStorage({
+		destination: (req, file, cb) => {
+			cb(null, path.join(__dirname, './'))
+		},
+		filename: (req, file, cb) => {
+			// randomBytes function will generate a random name
+			let customFileName = crypto.randomBytes(18).toString('hex')
+			// get file extension from original file name
+			let fileExtension = path.extname(file.originalname).split('.')[1];
+			cb(null, customFileName + '.' + fileExtension)
+		}
+	  })
+	})
+	
+	console.log(upload,'dddd');
+		
+	var values = [];
+	values.push([req.body.title,req.body.description,req.body.price,req.body.country,req.body.category,req.body.size,'sss','dd']);
+	
+	var error = '';
+	connection.query('INSERT INTO product (title,description,price,country_id,category_id,size_id,image,image_org_name) VALUES ?', [values], function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR '+err.sqlMessage;
+		}
+		else {
+		  error = 'Product added successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/product');
+	});
+});
+
+app.get("/admin/delete_product", async  (req, res) => {
+	let id = req.query.id;
+	
+	var sql = "DELETE FROM product WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR '+err.sqlMessage;
+		}
+		else {
+		  error = 'Product Deleted successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/product');
 	});
 });
 
@@ -167,7 +245,7 @@ app.post("/admin/savecategory", async  (req, res) => {
 	var error = '';
 	connection.query('INSERT INTO category (name) VALUES ?', [values], function(err,result) {
 		if(err) {
-		  error = 'SQL ERROR';
+		  error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
 		  error = 'Category added successfully';
@@ -185,7 +263,7 @@ app.get("/admin/delete_category", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		  error = 'SQL ERROR OR ID NOT FOUND';
+		  error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
 		  error = 'Category Deleted successfully';
@@ -203,7 +281,8 @@ app.get("/admin/edit_category", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		   req.flash('success','SQL ERROR OR ID NOT FOUND');
+			
+		   req.flash('success',err.sqlMessage);
 		   res.redirect('/admin/category');
 		}
 		else {
@@ -221,7 +300,7 @@ app.post("/admin/save_edit_category", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		   error = 'SQL ERROR OR ID NOT FOUND';
+		    error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
 		   error = 'Category updated successfully';
@@ -255,7 +334,7 @@ app.post("/admin/savesize", async  (req, res) => {
 	var error = '';
 	connection.query('INSERT INTO size (name) VALUES ?', [values], function(err,result) {
 		if(err) {
-		  error = 'SQL ERROR';
+		   error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
 		  error = 'Size added successfully';
@@ -273,7 +352,7 @@ app.get("/admin/delete_size", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		  error = 'SQL ERROR OR ID NOT FOUND';
+		  error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
 		  error = 'Size Deleted successfully';
@@ -291,7 +370,7 @@ app.get("/admin/edit_size", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		   req.flash('success','SQL ERROR OR ID NOT FOUND');
+		   req.flash('success',err.sqlMessage);
 		   res.redirect('/admin/size');
 		}
 		else {
@@ -309,7 +388,7 @@ app.post("/admin/save_edit_size", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		   error = 'SQL ERROR OR ID NOT FOUND';
+		   error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
 		   error = 'Size updated successfully';
@@ -343,7 +422,7 @@ app.post("/admin/savecountry", async  (req, res) => {
 	var error = '';
 	connection.query('INSERT INTO country (name) VALUES ?', [values], function(err,result) {
 		if(err) {
-		  error = 'SQL ERROR';
+		  error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
 		  error = 'Country added successfully';
@@ -361,7 +440,7 @@ app.get("/admin/delete_country", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		  error = 'SQL ERROR OR ID NOT FOUND';
+		  error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
 		  error = 'Country Deleted successfully';
@@ -379,7 +458,8 @@ app.get("/admin/edit_country", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		   req.flash('success','SQL ERROR OR ID NOT FOUND');
+			
+		   req.flash('success',err.sqlMessage);
 		   res.redirect('/admin/country');
 		}
 		else {
@@ -397,7 +477,7 @@ app.post("/admin/save_edit_country", async  (req, res) => {
 	var error = '';
     connection.query(sql, function(err,result) {
 		if(err) {
-		   error = 'SQL ERROR OR ID NOT FOUND';
+		   error = err.sqlMessage;
 		}
 		else {
 		   error = 'Country updated successfully';
