@@ -34,12 +34,12 @@
                 <th><%= parseInt(index)+parseInt(1) %>.</th>
                 <th><%= result[index].title %></th>
 				<th><%= result[index].description %></th>
-				<th><a target="_blank" href="./../uploads/<%= result[index].image %>"><%= result[index].image_org_name %></a></th>
+				<th><a target="_blank" href="./../uploads/product_images/<%= result[index].image %>"><%= result[index].image %></a></th>
 				<th><%= result[index].price %></th>
 				<th><%= result[index].size_name %></th>
 				<th><%= result[index].country_name %></th>
 				<th><%= result[index].category_name %></th>
-                <th><a href="./delete_product?id=<%= result[index].product_id %>"><i class="fa fa-trash"></i></a> | <a href="./edit_product?id=<%= result[index].product_id %>"><i class="fas fa-edit"></a></i></th>
+                <th><a href="./delete_product?id=<%= result[index].product_id %>&image=<%= result[index].image %>"><i class="fa fa-trash"></i></a> | <a href="./edit_product?id=<%= result[index].product_id %>"><i class="fas fa-edit"></a></i></th>
             </tr>
 			<% } %>
             

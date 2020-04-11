@@ -17,6 +17,7 @@ var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
 var multer  = require('multer');
 var upload = multer({ dest: 'uploads/' });
+const fileUpload = require('express-fileupload');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(cookieParser());
 app.use(session({secret: 'secret123',saveUninitialized:true,resave:true}));
+app.use(fileUpload());
 
 //- MYSQL Module
 try{
@@ -136,7 +138,9 @@ app.get("/admin", async  (req, res) => {
 
 app.get("/admin/product", async  (req, res) => {
 	res.locals.message = req.flash();
-	connection.query('Select product.id as product_id,product.title,product.description,product.price,product.image,product.image_org_name,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc', function(err,result) {
+	connection.query('Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc', function(err,result) {
+		
+		//console.log(result,'result');
 		res.render('admin/product/products.ejs',{year:year,result:result});
 	});
 });
@@ -169,34 +173,56 @@ app.get("/admin/edit_product", async  (req, res) => {
 });
 
 app.post("/admin/save_product", async  (req, res) => {	
+	let sampleFile = req.files.images;
+	let uni = new Date().getTime();
+	var file_name = uni+'_'+req.files.images.name
 	
-	let upload = multer({
-	storage: multer.diskStorage({
-		destination: (req, file, cb) => {
-			cb(null, path.join(__dirname, './'))
-		},
-		filename: (req, file, cb) => {
-			// randomBytes function will generate a random name
-			let customFileName = crypto.randomBytes(18).toString('hex')
-			// get file extension from original file name
-			let fileExtension = path.extname(file.originalname).split('.')[1];
-			cb(null, customFileName + '.' + fileExtension)
-		}
-	  })
-	})
+	sampleFile.mv('./uploads/product_images/'+file_name); 	
 	
-	console.log(upload,'dddd');
-		
 	var values = [];
-	values.push([req.body.title,req.body.description,req.body.price,req.body.country,req.body.category,req.body.size,'sss','dd']);
+	values.push([req.body.title,req.body.description,req.body.price,req.body.country,req.body.category,req.body.size,file_name]);
 	
 	var error = '';
-	connection.query('INSERT INTO product (title,description,price,country_id,category_id,size_id,image,image_org_name) VALUES ?', [values], function(err,result) {
+	connection.query('INSERT INTO product (title,description,price,country_id,category_id,size_id,image) VALUES ?', [values], function(err,result) {
 		if(err) {
 		  error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
+		 
 		  error = 'Product added successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/product');
+	});
+});
+
+app.post("/admin/edit_product_save", async  (req, res) => {	
+    let id = req.query.id;
+	
+	var file_name = req.query.image_name;
+    if(req.files){
+		let sampleFile = req.files.images;
+		let uni = new Date().getTime();
+		file_name = uni+'_'+req.files.images.name
+		sampleFile.mv('./uploads/product_images/'+file_name);
+
+        fs.unlinkSync('./uploads/product_images/'+req.query.image_name,function(err){
+			console.log(err);
+		});			
+	}
+	
+	var values = [];
+	values.push([req.body.title,req.body.description,req.body.price,req.body.country,req.body.category,req.body.size,file_name,id]);
+	var sql = "UPDATE product set title =? , description =?, price =?, country_id =?, category_id=?,size_id =?, image =?  WHERE id = ?";
+	var error = '';
+	connection.query(sql, [req.body.title,req.body.description,req.body.price,req.body.country,req.body.category,req.body.size,file_name,id], function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR '+err.sqlMessage;
+		}
+		else {
+		 
+		  error = 'Product updated successfully';
 		}
 		
 		req.flash('success',error);
@@ -206,6 +232,7 @@ app.post("/admin/save_product", async  (req, res) => {
 
 app.get("/admin/delete_product", async  (req, res) => {
 	let id = req.query.id;
+	let image = req.query.image;
 	
 	var sql = "DELETE FROM product WHERE id = '"+id+"'";
 	var error = '';
@@ -214,6 +241,7 @@ app.get("/admin/delete_product", async  (req, res) => {
 		  error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
+		  fs.unlinkSync('./uploads/product_images/'+image);	
 		  error = 'Product Deleted successfully';
 		}
 		
