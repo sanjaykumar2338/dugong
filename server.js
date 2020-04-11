@@ -51,16 +51,72 @@ var connection = mysql_npm.createConnection(db_config)
 //console.log(connection,'testing');
 
 app.get('/store', function(req, res) {
-      //shipping_method_arr = [];
-      connection.query('Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc', function(err,result) {
+	var category = req.query.category;
+	var size = req.query.size;
+	var country = req.query.country;
+
+	var search_param = [];
+	if(category){
+		var innerObj = 'category_id='+category;
+		search_param.push(innerObj)
+	}
+	
+	if(size){
+		var innerObj = 'size_id='+size;
+		search_param.push(innerObj);
+	}
+	
+	if(country){
+		var innerObj = 'country_id='+country;
+		search_param.push(innerObj);
+	}
+	
+	var search_certi = '';
+	if(search_param.length > 0){
+		var arr_len = search_param.length;
+		search_param.forEach(function(entry,index) {	
+			var check = parseInt(index) + 1;
+		
+			if(check==arr_len){
+				search_certi += entry; 
+			}else{
+				search_certi += entry+' AND '; 	
+			}
+		  
+		});
+	}
+	
+	var query = '';
+	if(search_certi==''){
+		console.log('if');
+		query = 'Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc';
+	}else{
+		console.log('else');
+		query = 'Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id where '+search_certi+' order by product.updated_at desc';
+	}
+	
+	console.log('else',query);
+  
+	connection.query(query, function(err,result) {
 	  fs.readFile('shipping_method.json', (err, shipping_method_arr) => {
-      
-		  res.render('store.ejs', {
-			stripePublicKey:stripePublicKey,
-			items: result,
-			shipping_method_arr:JSON.parse(shipping_method_arr)
-		  })
-	  });
+			
+		  connection.query('Select * from category', function(err,category_res) {
+			connection.query('Select * from size', function(err,size_res) {  
+			 connection.query('Select * from country', function(err,country_res) {  
+			
+				res.render('store.ejs', {
+					stripePublicKey:stripePublicKey,
+					items: result,
+					category:category_res,
+					size:size_res,
+					country:country_res,
+					shipping_method_arr:JSON.parse(shipping_method_arr)
+				});
+			  
+			});
+			});
+		  });
+		});
 	});
 });
 
@@ -132,9 +188,11 @@ app.get("/admin/product", async  (req, res) => {
 	res.locals.message = req.flash();
 	connection.query('Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc', function(err,result) {
 		
-		//console.log(result,'result');
-		res.render('admin/product/products.ejs',{year:year,result:result});
-	});
+	res.render('admin/product/products.ejs',{
+			year:year,
+			result:result
+		});
+	});	
 });
 
 app.get("/admin/padd", async  (req, res) => {
