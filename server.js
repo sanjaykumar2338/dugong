@@ -51,25 +51,17 @@ var connection = mysql_npm.createConnection(db_config)
 //console.log(connection,'testing');
 
 app.get('/store', function(req, res) {
-  fs.readFile('items.json', function(error, data) {
-    if (error) {
-      res.status(500).end()
-    } else {
-      
       //shipping_method_arr = [];
-      fs.readFile('shipping_method.json', (err, shipping_method_arr) => {
-        if (err) throw err;
-        //console.log(shipping_method_arr);
+      connection.query('Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc', function(err,result) {
+	  fs.readFile('shipping_method.json', (err, shipping_method_arr) => {
       
-      
-      res.render('store.ejs', {
-        stripePublicKey:stripePublicKey,
-        items: JSON.parse(data),
-        shipping_method_arr:JSON.parse(shipping_method_arr)
-      })
-    });
-    }
-  })
+		  res.render('store.ejs', {
+			stripePublicKey:stripePublicKey,
+			items: result,
+			shipping_method_arr:JSON.parse(shipping_method_arr)
+		  })
+	  });
+	});
 });
 
 app.get('/checkout', async (req, res) => {
