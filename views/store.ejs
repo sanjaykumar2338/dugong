@@ -196,6 +196,9 @@
             <label><b>State</b></label><br>
             <input type="text" name="state" class="state"><br>
             <br>
+			<label><b>Zipcode</b></label><br>
+            <input type="number" name="zipcode" class="zipcode"><br>
+            <br>
             <label><b>Country</b></label><br>
             <input type="text" name="country" class="country"><br>
             <b>Other Info.</b><br>
@@ -208,8 +211,25 @@
          <input type="hidden" id="stripeEmail" name="stripeEmail" />
          <input type="hidden" id="amountInCents" name="amountInCents" />
          </form>
-         <input type="button" id="customButton" value="Pay with Stripe">
+         <input type="button" id="customButton" value="Pay with Stripe"><br>
+		 
+		 <input type="button" id="customButtonBankTranser" value="Bank Transfer">
       </section>
+	  
+
+		<div id="popup1" class="overlay">
+			<div class="popup">
+				<h2>DIRECT BANK TRANFER</h2>
+				<a class="close" href="#">×</a>
+				<div class="content">
+					IBAN BANK: <input type="text" value="" name="iban_bank" id="iban_bank" style="margin-left: 148px;"><br><br><br>
+				    SECRET TRANSCATION NUMBER: <input type="text" readonly value="" name="iban_bank_random_number" id="iban_bank_random_number"><br><br><br>
+					<input type="button" id="customButtonBankTranser_Send" value="Submit">
+				</div>
+			</div>
+		</div>
+	  
+	  
       <footer>
          <section class="footer">
             <ul class="list1" id="lista1">

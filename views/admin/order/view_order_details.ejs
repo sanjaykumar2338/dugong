@@ -1,0 +1,38 @@
+<%- include('./../header') %>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800">Order Purchase Items  <a style="float:right" href="./../admin/order">Back</a></h1>
+		 
+		   <table id="product_table" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Title</th>
+                <th>Product Price</th>
+                <th>Request Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+		   <%  for (let index in result){ %>
+            <tr>
+                <th>#<%= result[index].product_id %></th>
+                <th><%= result[index].title %></th>
+				<th><%= result[index].price %></th>
+				<th><%= result[index].quantity %></th>
+            </tr>
+			<% } %>
+            
+        </tbody>
+    </table>	
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+	  
+<%- include('./../footer') %>

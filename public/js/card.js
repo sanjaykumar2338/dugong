@@ -13,7 +13,8 @@ $(document).ready(function(){
         var street = document.getElementsByClassName('street')[0].value
         var state = document.getElementsByClassName('state')[0].value
         var country = document.getElementsByClassName('country')[0].value
-
+		var zipcode = document.getElementsByClassName('zipcode')[0].value
+		
         for (var i = 0; i < cartRows.length; i++) {
             var cartRow = cartRows[i]
             var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
@@ -49,7 +50,8 @@ $(document).ready(function(){
                 recept:recept,
                 street:street,
                 state:state,
-                country:country
+                country:country,
+				zipcode:zipcode
             })
         }).then(function(res) {
             return res.json()
@@ -67,6 +69,102 @@ $(document).ready(function(){
   }
 });
 
+   $('#customButtonBankTranser').on('click', function(e) {
+    var amt = $('.cart-total-price').text().replace(/[^0-9]/gi, '');
+    if(amt==0){
+      alert('Card is empty');
+      return;
+    }
+
+    var recept = document.getElementsByClassName('recept')[0].value
+
+    $('html, body').animate({
+      scrollTop: $(".cart-total-price").offset().top
+    }, 2000);
+
+    if(recept==0){
+      alert('Recept is required!');
+      return;
+    }
+
+    var street = document.getElementsByClassName('street')[0].value
+
+    if(street==0){
+      alert('Street is required!');
+      return;
+    }
+
+    var state = document.getElementsByClassName('state')[0].value
+
+    if(state==0){
+      alert('State is required!');
+      return;
+    }
+
+    var country = document.getElementsByClassName('country')[0].value
+
+    if(country==0){
+      alert('Country is required!');
+      return;
+    }
+	
+	$('html, body').animate({
+      scrollTop: $(".cart-total-price").offset().top
+    });
+	
+	setTimeout(function(){
+    let random_number = Math.floor(Math.random() * (100000000000 - 9 + 1)) + 9;
+	$('#popup1').find('#iban_bank_random_number').val(random_number);
+	$('#popup1').css({"visibility": "visible", "opacity": "1"});
+	},2000);
+	return;
+    
+    var cartItemContainer = document.getElementsByClassName('cart-items')[0]
+    var cartRows = cartItemContainer.getElementsByClassName('cart-row')
+    
+    var total_price = [];
+    for (var i = 0; i < cartRows.length; i++) {
+      var cartRow = cartRows[i]
+      var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
+      var priceElement = cartRow.getElementsByClassName('cart-price')[0]
+      
+      var price = priceElement.innerHTML.replace(/[^0-9]/gi, '');
+      price = price / 100;
+      
+      var quantity = quantityElement.value
+      var id = cartRow.dataset.itemId
+      var nameElement = cartRow.getElementsByClassName('cart-item-title')[0]
+      var name = nameElement.innerHTML;
+      
+      var item_price = parseFloat(price) * parseInt(quantity);      
+      total_price.push(item_price);
+    }
+
+    var sum = total_price.reduce(function(a, b){
+        return a + b;
+    }, 0);
+
+    console.log(sum,'sum')
+    //amt = sum / 100;
+    amt = sum;
+    console.log(amt,'amt');
+    var amountInCents = Math.floor(amt * 100);
+    console.log(amountInCents,'amountInCents')
+
+    handler.open({
+      name: 'Dugong',
+      amount: amountInCents,
+      currency:'eur',
+      email:''
+    });
+    
+    e.preventDefault();
+  });
+  
+  $('.close').on('click',function(){
+	$('#popup1').removeAttr("style");
+  });
+  
   $('#customButton').on('click', function(e) {
     var amt = $('.cart-total-price').text().replace(/[^0-9]/gi, '');
     if(amt==0){

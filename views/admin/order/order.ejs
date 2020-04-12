@@ -45,7 +45,7 @@
 				<th><%= result[index].country %></th>
 				<th><%= result[index].zip_code %></th>
 				<th><%= result[index].other_info %></th>
-                <th><a onclick="return confirm('are you sure?')" href="./delete_order?id=<%= result[index].id %>"><i class="fa fa-trash"></i></a> | <a href="./edit_product?id=<%= result[index].product_id %>"><i class="fas fa-eye"></a></i></th>
+                <th><a onclick="return confirm('are you sure?')" href="./delete_order?id=<%= result[index].id %>"><i class="fa fa-trash"></i></a> | <a href="./view_order_items?id=<%= result[index].id %>"><i class="fas fa-eye"></a></i></th>
             </tr>
 			<% } %>
             

@@ -146,9 +146,9 @@ app.post('/checkout', function(req, res) {
 		  var charge_id = response.id;
           var responseJson = JSON.stringify(req.body.items);
           var values = [];
-          values.push([total,'Stripe',response.billing_details.name,charge_id,req.body.shipping_method,req.body.other_info,req.body.recept,req.body.street,req.body.state,req.body.country]);
+          values.push([total,'Stripe',response.billing_details.name,charge_id,req.body.shipping_method,req.body.other_info,req.body.recept,req.body.street,req.body.state,req.body.country,req.body.zipcode]);
           
-          connection.query('INSERT INTO orders (paid_amt,payment_method,email,stripe_charge_it,shipping_method,other_info,recept,street,state,country) VALUES ?', [values], function(err,result) {
+          connection.query('INSERT INTO orders (paid_amt,payment_method,email,stripe_charge_it,shipping_method,other_info,recept,street,state,country,zip_code) VALUES ?', [values], function(err,result) {
 			var error = ''; 
             if(err) {
               console.log('insert error',err);
@@ -181,8 +181,8 @@ app.post('/checkout', function(req, res) {
 var year = new Date().getFullYear();
 
 //For Products
-app.get("/admin", async  (req, res) => {
-  res.render('admin/main.ejs',{year:year});
+app.get("/admin", async  (req, res) => {  	
+	res.render('admin/main.ejs',{year:year});
 });
 
 app.get("/admin/product", async  (req, res) => {
@@ -311,7 +311,7 @@ app.get("/admin/delete_product", async  (req, res) => {
 app.get("/admin/order", async  (req, res) => {
   res.locals.message = req.flash();
 	
-  connection.query('Select * from orders order by updated_at DESC', function(err,result) {
+  connection.query('Select * from orders order by id', function(err,result) {
 	  res.render('admin/order/order.ejs',{year:year,result:result});
   });	  
 
@@ -339,6 +339,23 @@ app.get("/admin/delete_order", async  (req, res) => {
 		res.redirect('/admin/order');
 	});  
 
+});
+
+app.get("/admin/view_order_items", async  (req, res) => {
+	let id = req.query.id;
+	
+	var sql = "SELECT * FROM order_items INNER JOIN product on product.id=order_items.product_id WHERE order_id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR '+err.sqlMessage;
+		}
+		else {
+		  error = 'Category Deleted successfully';
+		}
+		
+		res.render('admin/order/view_order_details.ejs',{year:year,result:result});
+	});
 });
 
 //For Category
