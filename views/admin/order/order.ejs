@@ -1,0 +1,60 @@
+<%- include('./../header') %>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800">Manage Orders</h1>
+			
+				<% if(locals.message.success){ %>
+			<div class="alert alert-success" role="alert">
+				<%=message.success%>
+			</div>
+			<% } %>
+		  
+		   <table id="product_table" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Email</th>
+                <th>Shipping Method</th>
+                <th>Payment Method</th>
+				<th>Paid Amt.</th>
+                <th>Recept</th>
+				<th>Street</th>
+				<th>Country</th>
+				<th>Zipcode</th>
+				<th>Other Info.</th>
+				<th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+		   <%  for (let index in result){ %>
+            <tr>
+                <th>#<%= result[index].id %></th>
+                <th><%= result[index].email %></th>
+				<th><%= result[index].shipping_method %></th>
+				<th><%= result[index].payment_method %></th>
+				
+				<th><%= result[index].paid_amt %></th>
+				
+				<th><%= result[index].recept %></th>
+				<th><%= result[index].street %></th>
+				<th><%= result[index].country %></th>
+				<th><%= result[index].zip_code %></th>
+				<th><%= result[index].other_info %></th>
+                <th><a onclick="return confirm('are you sure?')" href="./delete_order?id=<%= result[index].id %>"><i class="fa fa-trash"></i></a> | <a href="./edit_product?id=<%= result[index].product_id %>"><i class="fas fa-eye"></a></i></th>
+            </tr>
+			<% } %>
+            
+        </tbody>
+    </table>	
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+	  
+<%- include('./../footer') %>

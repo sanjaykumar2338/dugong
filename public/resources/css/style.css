@@ -833,7 +833,7 @@ footer .list1 a{
 .shop-item{
   margin-bottom: 20px;
   width:250px;
-  height:390px;
+  height:450px;
   background-color: white;
   margin-top: 20px;
   
@@ -912,7 +912,7 @@ table input:hover{
 .carticon a{
   list-style: none;
  color: black;
- text-decoration: none;
+ text-decoration: underline;
 }
 #cart{
   margin-top: 70px;
@@ -1470,3 +1470,47 @@ height:310px
   transform: translate3d(-1px, 0, -40px) rotateY(90deg);
   transform-origin: 100%;
 }
+
+.numericButton
+{
+    background-color: #FFFFFF;
+    color: #666666;
+    border: 1px solid #C9C9C9;
+    display: inline-block;
+    height: 15px;
+    line-height: 14px;
+    min-width: 14px !important;
+    padding: 4px;
+    text-align: center;
+    text-decoration: none;
+}
+.currentPageButton
+{
+    background-color: #686868;
+    color: #fff !important;
+    border: 1px solid #C9C9C9;
+    display: inline-block;
+    height: 15px;
+    line-height: 14px;
+    min-width: 14px !important;
+    padding: 4px;
+    text-align: center;
+    text-decoration: none;
+}
+.nextbutton {
+    background-color: #FFFFFF;
+    border: 1px solid #C9C9C9;
+    color: #666666 !important;
+    display: inline-block;
+    height: 15px;
+    line-height: 14px;
+    padding: 4px;
+    text-align: center;
+    text-decoration: none;
+    width: 55px;
+}
+#page_navigation{
+    padding-top:8px;
+}
+}
+

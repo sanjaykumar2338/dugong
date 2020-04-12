@@ -1,0 +1,75 @@
+<%- include('./../header') %>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800">Edit Product</h1>
+		   <form method="POST" action="./edit_product_save?id=<%= product.id %>&image_name=<%= product.image %>" enctype="multipart/form-data">
+			  <div class="form-group">
+				<label for="exampleInputEmail1">Category Type</label>
+				<select class="form-control" id="category" name="category">
+				    <option>Choose Category</option> 
+					<%  for (let index in category){ %>
+					  <% var selected = ( category[index].id == product.category_id ) ? "selected" : ""; %>	
+					  <option <%=selected %> value="<%= category[index].id %>" <%= category[index].id %>><%= category[index].name %></option>
+					<% } %>  
+				</select>
+			  </div>
+			  
+			   <div class="form-group">
+				<label for="exampleInputEmail1">Available Countries</label>
+				
+				<select class="form-control" id="country" name="country">
+					<option>Choose Country</option> 
+					<%  for (let index in country){ %>
+					  <% var selected = ( country[index].id == product.country_id ) ? "selected" : ""; %>	
+					  <option <%=selected %> value="<%= country[index].id %>"><%= country[index].name %></option>
+					<% } %>  
+				</select>
+			  </div>
+			  
+			  <div class="form-group">
+				<label for="exampleInputEmail1">Size</label>
+				
+				<select class="form-control" id="size" name="size">
+				    <option>Choose Size</option> 
+					<%  for (let index in size){ %>
+					  <% var selected = ( size[index].id == product.size_id ) ? "selected" : ""; %>	
+					  <option <%=selected %> value="<%= size[index].id %>"><%= size[index].name %></option>
+					<% } %>  
+				</select>
+			  </div>
+			  
+			  
+			  
+			  <div class="form-group">
+				<label for="exampleInputPassword1">Title</label>
+				<input type="text" class="form-control" value="<%= product.title %>" required id="title" placeholder="Title" name="title">
+			  </div>
+			  
+			  <div class="form-group">
+				<label for="exampleFormControlTextarea1">Description</label>
+				<textarea class="form-control" name="description" required id="description" placeholder="Description" rows="3"><%= product.description %></textarea>
+				</div>
+			  
+			   <div class="form-group">
+				<label for="exampleInputPassword1">Price</label>
+				<input type="number" class="form-control" id="price" value="<%= product.price %>" required placeholder="Price" name="price">
+			  </div>			   
+				
+				<div class="form-group">
+					<label for="exampleFormControlFile1">Choose Images:</label>
+					<input type="file" class="form-control-file" id="images" name="images" accept="image/x-png,image/gif,image/jpeg" />
+				  </div>
+			  
+			  <button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+	  
+<%- include('./../footer') %>

@@ -2,8 +2,8 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
+const stripeSecretKey = 'sk_test_59JIEmqaYNWwDJEKjYAZUiO9';
+const stripePublicKey = 'pk_test_c7qV6O2YfkWJDOsxb81NTU2W';
 
 const express = require('express')
 const path = require('path');
@@ -88,14 +88,12 @@ app.get('/store', function(req, res) {
 	
 	var query = '';
 	if(search_certi==''){
-		console.log('if');
+		
 		query = 'Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc';
 	}else{
-		console.log('else');
+		
 		query = 'Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id where '+search_certi+' order by product.updated_at desc';
 	}
-	
-	console.log('else',query);
   
 	connection.query(query, function(err,result) {
 	  fs.readFile('shipping_method.json', (err, shipping_method_arr) => {
@@ -110,7 +108,8 @@ app.get('/store', function(req, res) {
 					category:category_res,
 					size:size_res,
 					country:country_res,
-					shipping_method_arr:JSON.parse(shipping_method_arr)
+					shipping_method_arr:JSON.parse(shipping_method_arr),
+					req:req
 				});
 			  
 			});
@@ -144,32 +143,34 @@ app.post('/checkout', function(req, res) {
         source: req.body.stripeTokenId,
         currency: 'eur'
       }).then(function(response) {
-        console.log('Charge Successful',response);
-
-        connection.connect(function(err) {
-          if (err) {
-            console.error('error: ' + err.message);
-          }
-
-          var charge_id = response.id;
+		  var charge_id = response.id;
           var responseJson = JSON.stringify(req.body.items);
           var values = [];
-          values.push([charge_id,responseJson,req.body.shipping_method,req.body.other_info,req.body.recept,req.body.street,req.body.state,req.body.country]);
+          values.push([total,'Stripe',response.billing_details.name,charge_id,req.body.shipping_method,req.body.other_info,req.body.recept,req.body.street,req.body.state,req.body.country]);
           
-          connection.query('INSERT INTO orders (stripe_charge_it, order_data,shipping_method,other_info,recept,street,state,country) VALUES ?', [values], function(err,result) {
+          connection.query('INSERT INTO orders (paid_amt,payment_method,email,stripe_charge_it,shipping_method,other_info,recept,street,state,country) VALUES ?', [values], function(err,result) {
+			var error = ''; 
             if(err) {
               console.log('insert error',err);
             }
            else {
               console.log('inserted success');
+			  
+			  if(req.body.items){
+				  req.body.items.forEach(function(item, index) {
+					var insert_items = [];  
+					insert_items.push([result.insertId,item.id,item.quantity]);					
+					
+					connection.query('INSERT INTO order_items (order_id,product_id,quantity) VALUES ?', [insert_items],function(err,result) {
+						//console.log(err,result);
+					});
+					
+				  });
+			  }
             }
           });
-         
-          console.log('Connected to the MySQL server.');
-        });
-
-
-        res.json({ message: 'Successfully purchased items' })
+		  
+		  res.json({ message: 'Successfully purchased items' })
       }).catch(function(err) {
         console.log('Charge Fail',err)
         res.status(500).end()
@@ -227,7 +228,9 @@ app.post("/admin/save_product", async  (req, res) => {
 	let uni = new Date().getTime();
 	var file_name = uni+'_'+req.files.images.name
 	
-	sampleFile.mv('./uploads/product_images/'+file_name); 	
+	sampleFile.mv('./public/uploads/product_images/'+file_name,function(res){
+		console.log(res,'test');	
+	}); 	
 	
 	var values = [];
 	values.push([req.body.title,req.body.description,req.body.price,req.body.country,req.body.category,req.body.size,file_name]);
@@ -255,11 +258,13 @@ app.post("/admin/edit_product_save", async  (req, res) => {
 		let sampleFile = req.files.images;
 		let uni = new Date().getTime();
 		file_name = uni+'_'+req.files.images.name
-		sampleFile.mv('./uploads/product_images/'+file_name);
-
-        fs.unlinkSync('./uploads/product_images/'+req.query.image_name,function(err){
-			console.log(err);
-		});			
+		sampleFile.mv('./public/uploads/product_images/'+file_name);
+		
+		if (fs.existsSync('./uploads/product_images/'+req.query.image_name)) {
+			fs.unlinkSync('./uploads/product_images/'+req.query.image_name,function(err){
+				console.log(err);
+			});	
+		}	
 	}
 	
 	var values = [];
@@ -291,13 +296,49 @@ app.get("/admin/delete_product", async  (req, res) => {
 		  error = 'SQL ERROR '+err.sqlMessage;
 		}
 		else {
-		  fs.unlinkSync('./uploads/product_images/'+image);	
+		  if (fs.existsSync('./uploads/product_images/'+image)) {	
+			fs.unlinkSync('./uploads/product_images/'+image);	
+		  }
 		  error = 'Product Deleted successfully';
 		}
 		
 		req.flash('success',error);
 		res.redirect('/admin/product');
 	});
+});
+
+//For Orders
+app.get("/admin/order", async  (req, res) => {
+  res.locals.message = req.flash();
+	
+  connection.query('Select * from orders order by updated_at DESC', function(err,result) {
+	  res.render('admin/order/order.ejs',{year:year,result:result});
+  });	  
+
+});
+
+app.get("/admin/delete_order", async  (req, res) => {
+	let id = req.query.id;
+	
+	var sql = "DELETE FROM orders WHERE id = '"+id+"'";
+	var error = '';
+    connection.query(sql, function(err,result) {
+		if(err) {
+		  error = 'SQL ERROR '+err.sqlMessage;
+		}
+		else {
+		  sql = "DELETE FROM order_items WHERE order_id = '"+id+"'";	
+		  connection.query(sql, function(err,result) {
+
+		  });
+		  
+		  error = 'Order Deleted successfully';
+		}
+		
+		req.flash('success',error);
+		res.redirect('/admin/order');
+	});  
+
 });
 
 //For Category
@@ -566,4 +607,5 @@ app.post("/admin/save_edit_country", async  (req, res) => {
 	});
 });
 
-app.listen(4000)
+app.listen(4000);
+console.log('started at: http://localhost:4000');
