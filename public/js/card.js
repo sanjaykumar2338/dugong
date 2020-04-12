@@ -1,9 +1,9 @@
 $(document).ready(function(){
   var handler = StripeCheckout.configure({
-  key: 'pk_test_c7qV6O2YfkWJDOsxb81NTU2W',
+  key: 'pk_test_BDlJ33LBsh5s6L69P5y3AAvp00ETkWe6tP',
   image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
   token: function(token) {
-    var items = []
+		var items = []
         var cartItemContainer = document.getElementsByClassName('cart-items')[0]
         var cartRows = cartItemContainer.getElementsByClassName('cart-row')
         var shipping_method = document.getElementsByClassName('shipping_method')[0].value
@@ -19,7 +19,8 @@ $(document).ready(function(){
             var cartRow = cartRows[i]
             var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
             var priceElement = cartRow.getElementsByClassName('cart-price')[0]
-            
+            var selected_choose = cartRow.getElementsByClassName('selected_size')[0].innerText
+			
             var price = priceElement.innerHTML.replace(/[^0-9]/gi, '');
             price = price / 100;
             
@@ -31,7 +32,8 @@ $(document).ready(function(){
                 id: id,
                 name: name,
                 quantity: quantity,
-                price:price
+                price:price,
+				selected_choose:selected_choose
             })
             
         }
@@ -61,6 +63,10 @@ $(document).ready(function(){
             while (cartItems.hasChildNodes()) {
                 cartItems.removeChild(cartItems.firstChild)
             }
+			
+			setTimeout(function(){
+				location.reload();	
+			},1000);
 
             updateCartTotal()
         }).catch(function(error) {
@@ -68,6 +74,88 @@ $(document).ready(function(){
         })
   }
 });
+
+   
+   $('#customButtonBankTranser_Send').on('click', function(e) {
+	    var items = []
+        var cartItemContainer = document.getElementsByClassName('cart-items')[0]
+        var cartRows = cartItemContainer.getElementsByClassName('cart-row')
+        var shipping_method = document.getElementsByClassName('shipping_method')[0].value
+        var other_info = document.getElementsByClassName('other_info')[0].value
+        
+        var recept = document.getElementsByClassName('recept')[0].value
+        var street = document.getElementsByClassName('street')[0].value
+        var state = document.getElementsByClassName('state')[0].value
+        var country = document.getElementsByClassName('country')[0].value
+		var zipcode = document.getElementsByClassName('zipcode')[0].value
+		var iban_bank = document.getElementsByClassName('iban_bank')[0].value
+		var iban_bank_random_number = document.getElementsByClassName('iban_bank_random_number')[0].value
+		var email_id = document.getElementsByClassName('email_id')[0].value
+		
+        for (var i = 0; i < cartRows.length; i++) {
+            var cartRow = cartRows[i]
+            var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
+            var priceElement = cartRow.getElementsByClassName('cart-price')[0]
+			var selected_choose = cartRow.getElementsByClassName('selected_size')[0].innerText
+            
+            var price = priceElement.innerHTML.replace(/[^0-9]/gi, '');
+            price = price / 100;
+            
+            var quantity = quantityElement.value
+            var id = cartRow.dataset.itemId
+            var nameElement = cartRow.getElementsByClassName('cart-item-title')[0]
+            var name = nameElement.innerHTML;
+            items.push({
+                id: id,
+                name: name,
+                quantity: quantity,
+                price:price,
+				selected_choose:selected_choose
+            })
+            
+        }
+		
+		console.log(items,'items');
+		
+		fetch('/direct_bank_payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                items: items,
+                shipping_method:shipping_method,
+                other_info:other_info,
+                recept:recept,
+                street:street,
+                state:state,
+                country:country,
+				zipcode:zipcode,
+				iban_bank:iban_bank,
+				iban_bank_random_number:iban_bank_random_number,
+				email_id:email_id
+            })
+        }).then(function(res) {
+            return res.json()
+        }).then(function(data) {
+            alert(data.message)
+            var cartItems = document.getElementsByClassName('cart-items')[0]
+            while (cartItems.hasChildNodes()) {
+                cartItems.removeChild(cartItems.firstChild)
+            }
+
+            updateCartTotal();
+			
+			setTimeout(function(){
+				location.reload();	
+			},1000);
+			
+        }).catch(function(error) {
+            console.error(error);
+        })
+	   
+   });	   
 
    $('#customButtonBankTranser').on('click', function(e) {
     var amt = $('.cart-total-price').text().replace(/[^0-9]/gi, '');
@@ -86,7 +174,14 @@ $(document).ready(function(){
       alert('Recept is required!');
       return;
     }
-
+	
+	var email_id = document.getElementsByClassName('email_id')[0].value
+	
+	if(email_id==0){
+      alert('Email is required!');
+      return;
+    }
+	
     var street = document.getElementsByClassName('street')[0].value
 
     if(street==0){

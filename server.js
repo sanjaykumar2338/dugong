@@ -2,8 +2,8 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-const stripeSecretKey = 'sk_test_59JIEmqaYNWwDJEKjYAZUiO9';
-const stripePublicKey = 'pk_test_c7qV6O2YfkWJDOsxb81NTU2W';
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 
 const express = require('express')
 const path = require('path');
@@ -89,7 +89,7 @@ app.get('/store', function(req, res) {
 	var query = '';
 	if(search_certi==''){
 		
-		query = 'Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc';
+		query = 'Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,size.id as size_id,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id order by product.updated_at desc';
 	}else{
 		
 		query = 'Select product.id as product_id,product.title,product.description,product.price,product.image,category.name as category_name,size.name as size_name,country.name as country_name from product LEFT JOIN category ON category.id = product.category_id LEFT JOIN country ON country.id = product.country_id LEFT JOIN size ON size.id = product.size_id where '+search_certi+' order by product.updated_at desc';
@@ -127,6 +127,49 @@ app.get('/stripe_payment', function(req, res) {
   res.render('charge.ejs');
 });
 
+app.post('/direct_bank_payment', function(req, res) {
+      const itemsArray = req.body.items;
+      let total = 0
+      req.body.items.forEach(function(item) {
+        total = total + item.price * item.quantity
+      })
+
+      total = total.toFixed(2);
+      total = parseFloat(total);
+      var amountInCents = Math.floor(total * 100);
+
+    
+	  var charge_id = '';
+	  var responseJson = JSON.stringify(req.body.items);
+	  var values = [];
+	  values.push([req.body.iban_bank_random_number,total,req.body.iban_bank,req.body.email_id,charge_id,req.body.shipping_method,req.body.other_info,req.body.recept,req.body.street,req.body.state,req.body.country,req.body.zipcode]);
+	  
+	  connection.query('INSERT INTO orders (secret_trans_number,paid_amt,payment_method,email,stripe_charge_it,shipping_method,other_info,recept,street,state,country,zip_code) VALUES ?', [values], function(err,result) {
+		var error = ''; 
+		if(err) {
+		  console.log('insert error',err);
+		}
+	   else {
+		  console.log('inserted success');
+		  
+		  if(req.body.items){
+			  req.body.items.forEach(function(item, index) {
+				var insert_items = [];  
+				insert_items.push([result.insertId,item.id,item.quantity,item.selected_choose]);					
+				
+				connection.query('INSERT INTO order_items (order_id,product_id,quantity,size) VALUES ?', [insert_items],function(err,result) {
+					//console.log(err,result);
+				});
+				
+			  });
+		  }
+		}
+	  });
+	  
+	  res.json({ message: 'Successfully purchased items' })
+      
+})
+
 app.post('/checkout', function(req, res) {
       const itemsArray = req.body.items;
       let total = 0
@@ -159,9 +202,9 @@ app.post('/checkout', function(req, res) {
 			  if(req.body.items){
 				  req.body.items.forEach(function(item, index) {
 					var insert_items = [];  
-					insert_items.push([result.insertId,item.id,item.quantity]);					
+					insert_items.push([result.insertId,item.id,item.quantity,item.selected_choose]);					
 					
-					connection.query('INSERT INTO order_items (order_id,product_id,quantity) VALUES ?', [insert_items],function(err,result) {
+					connection.query('INSERT INTO order_items (order_id,product_id,quantity,size) VALUES ?', [insert_items],function(err,result) {
 						//console.log(err,result);
 					});
 					
@@ -624,5 +667,5 @@ app.post("/admin/save_edit_country", async  (req, res) => {
 	});
 });
 
-app.listen(4000);
-console.log('started at: http://localhost:4000');
+app.listen(3000);
+console.log('started at: http://localhost:3000');

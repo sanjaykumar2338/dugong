@@ -125,10 +125,19 @@
                   <div class="shop-item-details">
                      <table>
                      Title: <span class="shop-item-title"><%= items[index].title %></span><br>
-                     Description: <span class="shop-item-title"><%= items[index].description %></span><br>
-					 Size: <span class="shop-item-title"><%= items[index].size_name %></span><br>
-					 Country: <span class="shop-item-title"><%= items[index].country_name %></span><br>
-					 Category: <span class="shop-item-title"><%= items[index].category_name %></span>
+                     Description: <span class="shop-item-description"><%= items[index].description %></span><br>
+					 Country: <span class="shop-item-country"><%= items[index].country_name %></span><br>
+					 Category: <span class="shop-item-category"><%= items[index].category_name %></span><br>
+					 Default Size: <span class="shop_item_default_size" value=""><%= items[index].size_name %></span><br>
+					 Choose Size:
+					 
+					<select class="form-control size_choosen" id="size_choosen" name="size_choosen" style="width:120px">
+						<option></option> 
+						<%  for (let index in size){ %>
+						  <option value="<%= size[index].name %>"><%= size[index].name %></option>
+						<% } %>  
+					</select>
+					
                      <nav>
                      <table>
                         <tr>
@@ -190,6 +199,9 @@
             <label><b>Recept</b></label><br>
             <input type="text" name="recept" class="recept"><br>
             <br>
+			<label><b>Email</b></label><br>
+            <input type="email" name="email" class="email_id"><br>
+            <br>
             <label><b>Street</b></label><br>
             <input type="text" name="street" class="street"><br>
             <br>
@@ -222,8 +234,8 @@
 				<h2>DIRECT BANK TRANFER</h2>
 				<a class="close" href="#">×</a>
 				<div class="content">
-					IBAN BANK: <input type="text" value="" name="iban_bank" id="iban_bank" style="margin-left: 148px;"><br><br><br>
-				    SECRET TRANSCATION NUMBER: <input type="text" readonly value="" name="iban_bank_random_number" id="iban_bank_random_number"><br><br><br>
+					IBAN BANK: <input type="text" value="" name="iban_bank" class="iban_bank" id="iban_bank" style="margin-left: 148px;"><br><br><br>
+				    SECRET TRANSCATION NUMBER: <input type="text" readonly value="" class="iban_bank_random_number" name="iban_bank_random_number" id="iban_bank_random_number"><br><br><br>
 					<input type="button" id="customButtonBankTranser_Send" value="Submit">
 				</div>
 			</div>

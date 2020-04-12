@@ -97,15 +97,25 @@ function addToCartClicked(event) {
     var title = shopItem.getElementsByClassName('shop-item-title')[0].innerText
     var price = shopItem.getElementsByClassName('shop-item-price1')[0].innerText
     var imageSrc = shopItem.getElementsByClassName('shop-item-image')[0].src
-    var quantidade = document.getElementsByClassName('quantity')[0]
+    var quantidade = shopItem.getElementsByClassName('quantity')[0]
+	var default_size = shopItem.getElementsByClassName('shop_item_default_size')[0]
+	var size = shopItem.getElementsByClassName('size_choosen')[0]
+	
+	var selected_size = default_size.innerText;
+	if(size.value!=""){
+		selected_size = size.value;
+	}
+	
     var quantidade2 = quantidade.value
     var id = shopItem.getElementsByClassName('shop-item-price1')[0].getAttribute("id");
+	
+	console.log(selected_size,'selected_size');
    
-    addItemToCart(title, price, imageSrc, quantidade2, id)
+    addItemToCart(title, price, imageSrc, quantidade2, id,selected_size)
     updateCartTotal()
 }
 
-function addItemToCart(title, price, imageSrc, quantidade2, id) {
+function addItemToCart(title, price, imageSrc, quantidade2, id,selected_size) {
     var cartRow = document.createElement('div')
    
     cartRow.dataset.itemId = id
@@ -124,7 +134,8 @@ function addItemToCart(title, price, imageSrc, quantidade2, id) {
             <br>
             <span class="cart-item-title">${title}</span>
         </div>
-        <span class="cart-price cart-column">${price}</span>
+        Price: <span class="cart-price cart-column">${price}</span><br>
+		Choosed Size: <span class="selected_size">${selected_size}</span>
         <div class="cart-quantity cart-column">
         
             <input class="cart-quantity-input" value="${quantidade2}">
@@ -133,11 +144,11 @@ function addItemToCart(title, price, imageSrc, quantidade2, id) {
         
             
             <button class="btn btn-danger" type="button">Remover</button>
-        </div>`
+        </div>`;
+		
     cartRow.innerHTML = cartRowContents
     cartItems.append(cartRow)
     cartRow.getElementsByClassName('btn-danger')[0].addEventListener('click', removeCartItem)
-    
 }
 
 function updateCartTotal() {
